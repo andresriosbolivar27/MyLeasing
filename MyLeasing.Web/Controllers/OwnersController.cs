@@ -498,7 +498,8 @@ namespace MyLeasing.Web.Controllers
             return RedirectToAction($"{nameof(DetailsProperty)}/{contract.Property.Id}");
         }
 
-        public async Task<IActionResult> DeleteProperty(int? id)
+        //Borrar propiedad sino tiene contratos
+        public async Task<IActionResult> DeletePropertyWithoutContracts(int? id)
         {
             if (id == null)
             {
@@ -514,6 +515,35 @@ namespace MyLeasing.Web.Controllers
             }
 
             _dataContext.Properties.Remove(property);
+            await _dataContext.SaveChangesAsync();
+            return RedirectToAction($"{nameof(Details)}/{property.Owner.Id}");
+        }
+
+        public async Task<IActionResult> DeletePropertyFull(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var property = await _dataContext.Properties
+                .Include(p => p.Owner)
+                .Include(p => p.PropertyImages)
+                .FirstOrDefaultAsync(pi => pi.Id == id.Value);
+            if (property == null)
+            {
+                return NotFound();
+            }
+
+            if (property.Contracts.Count != 0)
+            {
+                ModelState.AddModelError(string.Empty, "The propery can't delete because it has contracts.");
+                return RedirectToAction($"{nameof(Details)}/{property.Owner.Id}");
+            }
+
+            _dataContext.PropertyImages.RemoveRange(property.PropertyImages);
+            _dataContext.Properties.RemoveRange(property);
+
             await _dataContext.SaveChangesAsync();
             return RedirectToAction($"{nameof(Details)}/{property.Owner.Id}");
         }
