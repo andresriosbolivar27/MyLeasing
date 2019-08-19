@@ -58,6 +58,8 @@ namespace MyLeasing.Web
             //services.AddSingleton<IUserHelper, UserHelper>();
             //Lo Inyecta cada vez que lo necesita y crea un nuevo objeto. 
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<ICombosHelpers, CombosHelpers>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
 
 
 
