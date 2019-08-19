@@ -60,6 +60,7 @@ namespace MyLeasing.Web
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<ICombosHelpers, CombosHelpers>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IImageHelper, ImageHelper>();
 
 
 
