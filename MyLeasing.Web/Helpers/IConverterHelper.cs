@@ -8,5 +8,7 @@ namespace MyLeasing.Web.Helpers
     {
         Task<Property> ToPropertyAsync(PropertyViewModel model,bool IsNew);
         PropertyViewModel ToPropertyViewModel(Property property);
+        Task<Contract> ToContractAsync(ContractViewModel model, bool IsNew);
+        ContractViewModel ToContractViewModel(Contract contract);
     }
 }

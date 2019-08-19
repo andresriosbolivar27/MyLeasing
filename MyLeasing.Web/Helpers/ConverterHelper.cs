@@ -1,9 +1,7 @@
 ﻿using MyLeasing.Web.Data;
 using MyLeasing.Web.Data.Entities;
 using MyLeasing.Web.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyLeasing.Web.Helpers
@@ -11,15 +9,34 @@ namespace MyLeasing.Web.Helpers
     public class ConverterHelper : IConverterHelper
     {
         private readonly DataContext _dataContext;
-        private readonly ICombosHelpers _combosHelpers;
+        private readonly ICombosHelpers _combosHelper;
 
         public ConverterHelper(
             DataContext dataContext,
             ICombosHelpers combosHelper)
         {
             _dataContext = dataContext;
-            _combosHelpers = combosHelper;
+            _combosHelper = combosHelper;
         }
+
+        public async Task<Contract> ToContractAsync(ContractViewModel model, bool IsNew)
+        {
+            return new Contract
+            {
+                //guardar registro con hora de londres
+                EndDate = model.EndDate.ToUniversalTime(),
+                Id = IsNew ? 0 : model.Id,
+                IsActive = model.IsActive,
+                Lessee = await _dataContext.Lessees.FindAsync(model.LesseeId),
+                Owner = await _dataContext.Owners.FindAsync(model.OwnerId),
+                Price = model.Price,
+                Property = await _dataContext.Properties.FindAsync(model.PropertyId),
+                Remarks = model.Remarks,
+                StartDate = model.StartDate.ToUniversalTime(),
+
+            };
+        }
+
         public async Task<Property> ToPropertyAsync(PropertyViewModel model, bool isNew)
         {
             return new Property
@@ -36,7 +53,7 @@ namespace MyLeasing.Web.Helpers
                 PropertyImages = isNew ? new List<PropertyImage>() : model.PropertyImages,
                 Rooms = model.Rooms,
                 SquareMeters = model.SquareMeters,
-                Stratum = model.Stratum,                
+                Stratum = model.Stratum,
                 Remarks = model.Remarks
             };
         }
@@ -61,9 +78,27 @@ namespace MyLeasing.Web.Helpers
                 Remarks = property.Remarks,
                 OwnerId = property.Owner.Id,
                 PropertyTypeId = property.PropertyType.Id,
-                PropertyTypes = _combosHelpers.GetComboPropertyTypes()
+                PropertyTypes = _combosHelper.GetComboPropertyTypes()
 
             };
         }
+
+        public ContractViewModel ToContractViewModel(Contract contract)
+        {
+            return new ContractViewModel
+            {
+                EndDate = contract.EndDate,
+                IsActive = contract.IsActive,
+                LesseeId = contract.Lessee.Id,
+                OwnerId = contract.Owner.Id,
+                Price = contract.Price,
+                Remarks = contract.Remarks,
+                StartDate = contract.StartDate,
+                Id = contract.Id,
+                Lessees = _combosHelper.GetComboLessees(),
+                PropertyId = contract.Property.Id
+            };
+        }
+
     }
 }
