@@ -87,16 +87,19 @@ namespace MyLeasing.Web.Helpers
         {
             return new ContractViewModel
             {
-                EndDate = contract.EndDate,
-                IsActive = contract.IsActive,
-                LesseeId = contract.Lessee.Id,
-                OwnerId = contract.Owner.Id,
-                Price = contract.Price,
-                Remarks = contract.Remarks,
-                StartDate = contract.StartDate,
+                EndDate = contract.EndDateLocal,
                 Id = contract.Id,
+                IsActive = contract.IsActive,
+                Lessee = contract.Lessee,
+                Owner = contract.Owner,
+                Price = contract.Price,
+                Property = contract.Property,
+                Remarks = contract.Remarks,
+                StartDate = contract.StartDateLocal,
+                LesseeId = contract.Lessee.Id,
                 Lessees = _combosHelper.GetComboLessees(),
-                PropertyId = contract.Property.Id
+                PropertyId = contract.Property.Id,
+                OwnerId = contract.Owner.Id,
             };
         }
 
