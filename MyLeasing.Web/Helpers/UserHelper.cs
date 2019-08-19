@@ -84,8 +84,6 @@ namespace MyLeasing.Web.Helpers
         {
             return await _userManager.UpdateAsync(user);
         }
-
-
-
+                      
     }
 }
