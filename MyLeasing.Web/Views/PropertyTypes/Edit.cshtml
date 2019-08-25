@@ -1,20 +1,23 @@
-﻿@model MyLeasing.Web.Models.EditUserViewModel
+﻿@model MyLeasing.Web.Data.Entities.PropertyType
+
 @{
     ViewData["Title"] = "Edit";
 }
 
 <h2>Edit</h2>
 
-<h4>Owner</h4>
+<h4>PropertyType</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-
-            <partial name="_User" />
-
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-success">Back to List</a>
@@ -23,6 +26,4 @@
     </div>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
