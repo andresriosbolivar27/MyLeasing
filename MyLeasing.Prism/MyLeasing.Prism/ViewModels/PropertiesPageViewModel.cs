@@ -4,6 +4,7 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MyLeasing.Prism.ViewModels
@@ -11,10 +12,17 @@ namespace MyLeasing.Prism.ViewModels
     public class PropertiesPageViewModel : ViewModelBase
     {
         private OwnerResponse _owner;
+        private ObservableCollection<PropertyResponse> _properties;
         public PropertiesPageViewModel(
             INavigationService navigationService) :base(navigationService)
         {
             Title = "Properties";
+        }
+
+        public ObservableCollection<PropertyResponse> Properties
+        {
+            get => _properties;
+            set => SetProperty(ref _properties, value);
         }
 
         public override void OnNavigatedTo(INavigationParameters parameters)
@@ -25,6 +33,7 @@ namespace MyLeasing.Prism.ViewModels
             {
                 _owner = parameters.GetValue<OwnerResponse>("owner");
                 Title = $"Properties of: {_owner.FullName}";
+                Properties = new ObservableCollection<PropertyResponse>(_owner.Properties);
             }
         }
     }
