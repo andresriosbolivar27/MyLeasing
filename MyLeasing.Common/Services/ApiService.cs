@@ -1,10 +1,11 @@
-﻿using MyLeasing.Common.Models;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using MyLeasing.Common.Models;
+using Newtonsoft.Json;
+using Plugin.Connectivity;
 
 namespace MyLeasing.Common.Services
 {
@@ -55,7 +56,7 @@ namespace MyLeasing.Common.Services
             }
         }
 
-        public async Task<Response<OwnerResponse>> GetOwnerByEmail(
+        public async Task<Response<OwnerResponse>> GetOwnerByEmailAsync(
             string urlBase,
             string servicePrefix,
             string controller,
@@ -102,6 +103,16 @@ namespace MyLeasing.Common.Services
                     Message = ex.Message
                 };
             }
+        }
+
+        public async Task<bool> CheckConnectionAsync(string url)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
+            return await CrossConnectivity.Current.IsRemoteReachable(url);
         }
     }
 }
