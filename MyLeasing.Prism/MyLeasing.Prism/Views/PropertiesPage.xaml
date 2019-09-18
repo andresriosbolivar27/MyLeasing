@@ -21,6 +21,9 @@
                         <Frame
                             CornerRadius="10"
                             Margin="0,0,0,10">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectPropertyCommand}"/>
+                            </Frame.GestureRecognizers>
                             <StackLayout>
                                 <ffimageloading:CachedImage
                                     Aspect="AspectFit"
